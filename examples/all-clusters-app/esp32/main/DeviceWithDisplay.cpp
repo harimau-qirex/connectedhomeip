@@ -20,6 +20,8 @@
 #include <app-common/zap-generated/cluster-enums.h>
 #include <setup_payload/QRCodeSetupPayloadGenerator.h>
 
+#include <app/clusters/ota-requestor/OTARequestorInterface.h>
+
 #if CONFIG_HAVE_DISPLAY
 using namespace ::chip;
 using namespace ::chip::Credentials;
@@ -737,6 +739,22 @@ esp_err_t InitM5Stack(std::string qrCodeText)
                    []() {
                        ESP_LOGI(TAG, "Opening custom screen");
                        ScreenManager::PushScreen(chip::Platform::New<CustomScreen>());
+                   })
+            ->Item("Trigger OTA",
+                   []() {
+                       ESP_LOGI(TAG, "Schedule Triggering OTA");
+                       chip::DeviceLayer::PlatformMgr().ScheduleWork([](intptr_t) {
+                           ESP_LOGI(TAG, "Triggering OTA");
+                           chip::OTARequestorInterface * requestor = chip::GetRequestorInstance();
+                           if (requestor == nullptr)
+                           {
+                               ChipLogError(SoftwareUpdate, "Can't get the OTA Requestor");
+                           } else
+                           {
+                               requestor->TriggerImmediateQuery();
+                           }
+                       },
+                       reinterpret_cast<intptr_t>(nullptr));
                    })
             ->Item("More")
             ->Item("Items")

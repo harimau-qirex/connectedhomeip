@@ -70,7 +70,18 @@ CHIP_ERROR DownloadLogCommand::RunCommand()
             }
         }
 
-        ChipLogProgress(chipTool, "Diagnostic logs transfer: %s", error ? "Error" : "Success");
+        if (error) {
+            const char * domain = [error.domain cStringUsingEncoding:NSASCIIStringEncoding];
+            NSString * description = [error.userInfo valueForKey:NSLocalizedDescriptionKey];
+            const char * description2 = [description cStringUsingEncoding:NSASCIIStringEncoding];
+            if (description2) {
+                ChipLogProgress(chipTool, "Diagnostic logs transfer: Error (%s:%ld:%s)", domain, (long)error.code, description2);
+            } else {
+                ChipLogProgress(chipTool, "Diagnostic logs transfer: Error (%s:%ld)", domain, (long)error.code);
+            }
+        } else {
+            ChipLogProgress(chipTool, "Diagnostic logs transfer: Success");
+        }
         auto err = RemoteDataModelLogger::LogBdxDownload(logContent, error);
 
         if (CHIP_NO_ERROR != err) {

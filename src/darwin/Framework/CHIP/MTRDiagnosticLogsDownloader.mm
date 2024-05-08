@@ -188,7 +188,8 @@ private:
     auto status = response.status;
 
     VerifyOrReturn(![status isEqual:@(MTRDiagnosticLogsStatusBusy)], [self failure:[MTRError errorForCHIPErrorCode:CHIP_ERROR_BUSY]]);
-    VerifyOrReturn(![status isEqual:@(MTRDiagnosticLogsStatusDenied)], [self failure:[MTRError errorForCHIPErrorCode:CHIP_ERROR_ACCESS_DENIED]]);
+    //VerifyOrReturn(![status isEqual:@(MTRDiagnosticLogsStatusDenied)], [self failure:[MTRError errorForCHIPErrorCode:CHIP_ERROR_ACCESS_DENIED]]);
+    VerifyOrReturn(![status isEqual:@(MTRDiagnosticLogsStatusDenied)], [self failure:[MTRError errorForCHIPErrorCode:CHIP_ERROR_FABRIC_MISMATCH_ON_ICA]]);
 
     // If the whole log content fits into the response LogContent field or if there is no log, forward it to the caller
     // and stop here.
@@ -405,6 +406,7 @@ private:
         timeoutInSeconds = static_cast<uint16_t>(timeout);
     }
 
+    ChipLogProgress(chipTool, "QQQ qqq QQQ qqq QQQ");
     // This block is always called when a download is finished.
     auto done = ^(Download * finishedDownload) {
         [controller asyncDispatchToMatterQueue:^() {

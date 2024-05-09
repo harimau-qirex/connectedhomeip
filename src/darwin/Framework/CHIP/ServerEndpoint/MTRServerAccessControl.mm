@@ -97,8 +97,7 @@ class AccessControlDelegate : public AccessControl::Delegate {
         }
 
         // None of the grants matched.
-        //return CHIP_ERROR_ACCESS_DENIED;
-        return CHIP_ERROR_DUPLICATE_MESSAGE_RECEIVED;
+        return CHIP_ERROR_ACCESS_DENIED;
     }
 
     bool GrantSubjectMatchesDescriptor(MTRAccessGrant * grant, const SubjectDescriptor & descriptor)

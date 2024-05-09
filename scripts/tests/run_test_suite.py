@@ -69,7 +69,7 @@ class RunContext:
 @click.group(chain=True)
 @click.option(
     '--log-level',
-    default='info',
+    default='debug',
     type=click.Choice(__LOG_LEVELS__.keys(), case_sensitive=False),
     help='Determines the verbosity of script output.')
 @click.option(

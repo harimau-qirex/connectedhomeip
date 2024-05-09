@@ -225,8 +225,7 @@ class TestRunnerLogger(TestRunnerHooks):
                 message = request.arguments['values'][0]['value']
                 print(self.__strings.log.format(message=f'{message}'))
 
-        if self.__show_adapter_logs:
-            self.__log_printer.print(logs)
+        self.__log_printer.print(logs)
 
         self.__successes += logger.successes
         self.__warnings += logger.warnings
@@ -238,8 +237,7 @@ class TestRunnerLogger(TestRunnerHooks):
 
         self.__print_results(logger)
 
-        if self.__show_adapter_logs or self.__show_adapter_logs_on_error:
-            self.__log_printer.print(logs)
+        self.__log_printer.print(logs)
 
         has_failures_without_exception = False
         for entry in logger.entries:
